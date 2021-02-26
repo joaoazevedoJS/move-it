@@ -21,6 +21,7 @@
   height: 4px;
   border-radius: 4px;
   background: var(--green);
+  max-width: 100%;
 } 
 
 .experienceBar > div span.currentExperience {

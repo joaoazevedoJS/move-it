@@ -1,11 +1,23 @@
-import { useContext } from 'react';
+import { useCallback, useContext } from 'react';
 
 import { useChallenges } from '../contexts/ChallengesContext';
+import { useCountdown } from '../contexts/CountdownContext';
 
 import styles from '../styles/components/ChallengeBox.module.css'
 
 export function ChallengeBox() {
-  const { activeChallange, resetChallenge } = useChallenges();
+  const { activeChallange, resetChallenge, completeChallenge } = useChallenges();
+  const { resetCountdown } = useCountdown();
+
+  const handleChallengSucceeded = useCallback(() => {
+    completeChallenge();
+    resetCountdown();
+  }, [completeChallenge, resetCountdown])
+
+  const handleChallengFailed = useCallback(() => {
+    resetChallenge();
+    resetCountdown();
+  }, [resetChallenge, resetCountdown])
 
   return (
     <div className={styles.challengeBoxContainer}>
@@ -19,18 +31,31 @@ export function ChallengeBox() {
                 activeChallange.type === "body" ? (
                   <img src="icons/body.svg" alt="body" />
                 ) : (
-                  <img src="icons/eye.svg" alt="body" />
-                )
+                    <img src="icons/eye.svg" alt="body" />
+                  )
               }
-              
+
               <strong>Novo desafio</strong>
-            
+
               <p>{activeChallange.description}</p>
             </main>
 
             <footer>
-              <button type="button" onClick={resetChallenge} className={styles.challengFaildButton}>Falhei</button>
-              <button type="button" className={styles.challengSucceededButton}>Completei</button>
+              <button
+                type="button"
+                onClick={handleChallengFailed}
+                className={styles.challengFaildButton}
+              >
+                Falhei
+              </button>
+              
+              <button
+                type="button"
+                onClick={handleChallengSucceeded}
+                className={styles.challengSucceededButton}
+              >
+                Completei
+              </button>
             </footer>
           </div>
         ) : (

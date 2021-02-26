@@ -1,50 +1,16 @@
 import { Main } from 'next/document';
 import { useCallback, useEffect, useState } from 'react'
 import { useChallenges } from '../contexts/ChallengesContext';
+import { useCountdown } from '../contexts/CountdownContext';
 
 import styles from '../styles/components/Countdown.module.css'
 
-let countdownTimeout: NodeJS.Timeout;
-
 export function Countdown() {
-  const { startNewChallenge } = useChallenges();
-
-  const [time, setTime] = useState(0.1 * 60);
-  const [isActive, setIsActive] = useState(false);
-  const [hasFinished, setHasFinished] = useState(false);
-
-  const minutes = Math.floor(time / 60);
-  const seconds = time % 60;
+  const { minutes, seconds, hasFinished, isActive, startCountdow, resetCountdown } = useCountdown();
 
   const [minuteLeft, minuteRight] = String(minutes).padStart(2, '0').split('')
   const [secondLeft, secondRight] = String(seconds).padStart(2, '0').split('')
-
-  const startCountdow = useCallback(() => {
-    setIsActive(true)
-  }, [isActive])
-
-  const endCountdow = useCallback(() => {
-    clearTimeout(countdownTimeout)
-
-    setIsActive(false)
-
-    setTime(0.1 * 60)
-  }, [isActive])
-
-  useEffect(() => {
-    if (isActive && time > 0) {
-      countdownTimeout = setTimeout(() => {
-        setTime(time - 1);
-      }, 1000);
-    } else if (isActive && time == 0) {
-      setHasFinished(true);
-
-      setIsActive(false);
-
-      startNewChallenge();
-    }
-  }, [isActive, time])
-
+  
   return (
     <div>
       <div className={styles.countdownContainer}>
@@ -83,7 +49,7 @@ export function Countdown() {
                   <button
                     type="button"
                     className={`${styles.countdownButton} ${styles.countdownButtonActive}`}
-                    onClick={endCountdow}
+                    onClick={resetCountdown}
                   >
                     Abandonar ciclo
                   </button>
