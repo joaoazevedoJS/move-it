@@ -16,7 +16,6 @@ interface CookiesProps {
   level: number,
   currentExperience: number
   challengesCompleted: number
-  env: string;
 }
 
 export default function Home(props: CookiesProps) {
@@ -25,7 +24,6 @@ export default function Home(props: CookiesProps) {
       level={props.level}
       currentExperience={props.currentExperience}
       challengesCompleted={props.challengesCompleted}
-      env={props.env}
     >
       <div className={styles.container}>
         <Head>
@@ -59,7 +57,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     level: cookies.level ? Number(cookies.level) : 1,
     currentExperience: cookies.currentExperience ? Number(cookies.currentExperience) : 0,
     challengesCompleted: cookies.challengesCompleted ? Number(cookies.challengesCompleted) : 0,
-    env: process.env.OAUTH_GITHUB ? process.env.OAUTH_GITHUB : ' '
   }
 
   return {

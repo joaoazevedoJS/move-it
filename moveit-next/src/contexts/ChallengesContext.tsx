@@ -3,14 +3,12 @@ import Cookies from 'js-cookie';
 
 import challenges from '../../challenges.json'
 import { LevelUpModal } from '../components/LevelUpModal';
-import oauthGithub from '../services/oauthGithub';
 
 interface ChallengesProviderProps {
   children: ReactNode;
   level: number,
   currentExperience: number
   challengesCompleted: number
-  env: string
 }
 
 interface Challange {
@@ -127,17 +125,6 @@ const ChallengesProvider: FC<ChallengesProviderProps> = ({ children, ...rest }) 
 
   const closeLevelUpModal = useCallback(async () => {
     setIsLevelUpModalOpen(false);
-    
-    console.log(rest.env)
-
-    const res = await oauthGithub.get('/authorize', {
-      params: { 
-        login: 'joaoazevedojs',
-        client_id: rest.env
-      }
-    })
-    
-    console.log(res)
   }, [])
 
   return (
